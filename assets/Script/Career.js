@@ -7,28 +7,15 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-var com = require('Common');
+
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        targetButton:{
-            default:null,
-            type:cc.Button
-        },
-        buttonLabel:{
-            default:null,
-            type:cc.Label
-        },
         scrollView:{
             default:null,
             type:cc.Node
         },
-        cashLabel:{
-            default:null,
-            type:cc.Label
-        },
-        count: 0
         // foo: {
         //     // ATTRIBUTES:
         //     default: null,        // The default value will be used only when the component attaching
@@ -46,39 +33,20 @@ cc.Class({
         // },
     },
 
+    onCareerTrainningTapped (event) {
+        var scrollViewHandller = this.scrollView.getComponent("ScrollViewHandller");
+        scrollViewHandller.printMessage("通过培训支付了500元，您的工作技能得到了提升");
+    },
+    onBackButtonTapped (event) {
+        cc.director.loadScene("main");
+    },
+
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {},
 
     start () {
 
-    },
-
-    onWorkButtonTapped (event) {
-        var scrollViewHandller = this.scrollView.getComponent("ScrollViewHandller");
-        scrollViewHandller.printMessage("你通过工作得到了100元");
-        cc.log(com);
-        com.cashNum += 100;
-        
-        this.cashLabel.string = "" + com.cashNum;
-        this.count = 5;
-        this.callback = function () {
-            if (this.count == 0) {
-                // 倒计时结束可以使用按钮
-                this.buttonLabel.string = "工作";
-                this.targetButton.interactable = true;
-                this.unschedule(this.callback);
-                return;
-            }
-            this.buttonLabel.string = "" + this.count + "s";
-            this.count--;
-        };
-        this.schedule(this.callback, 1, 6, 0.1);
-        //禁用按钮
-        this.targetButton.interactable = false;
-    },
-    toCareerScene (event) {
-        cc.director.loadScene("career");
     },
 
     // update (dt) {},
