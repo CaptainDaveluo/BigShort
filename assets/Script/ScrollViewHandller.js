@@ -20,6 +20,10 @@ cc.Class({
             default:null,
             type:cc.Node
         },
+        scrollView:{
+            default:null,
+            type:cc.Node
+        },
         layoutHeight:0
         // foo: {
         //     // ATTRIBUTES:
@@ -53,6 +57,10 @@ cc.Class({
         this.content.addChild(itemNode);
         itemNode.y = this.layoutHeight;
         this.layoutHeight -= itemNode.height;
+        if (this.content.height <= -this.layoutHeight) {
+            this.content.height = -this.layoutHeight;
+            this.scrollView.getComponent(cc.ScrollView).scrollToBottom();
+        }
     },
     // update (dt) {},
 });

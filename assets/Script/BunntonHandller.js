@@ -57,21 +57,20 @@ cc.Class({
     onWorkButtonTapped (event) {
         var scrollViewHandller = this.scrollView.getComponent("ScrollViewHandller");
         scrollViewHandller.printMessage("你通过工作得到了100元");
-        cc.log(com);
         com.cashNum += 100;
         
         this.cashLabel.string = "" + com.cashNum;
-        this.count = 5;
+        com.timmerCount = 5;
         this.callback = function () {
-            if (this.count == 0) {
+            if (com.timmerCount == 0) {
                 // 倒计时结束可以使用按钮
                 this.buttonLabel.string = "工作";
                 this.targetButton.interactable = true;
                 this.unschedule(this.callback);
                 return;
             }
-            this.buttonLabel.string = "" + this.count + "s";
-            this.count--;
+            this.buttonLabel.string = "" + com.timmerCount + "s";
+            com.timmerCount--;
         };
         this.schedule(this.callback, 1, 6, 0.1);
         //禁用按钮
@@ -80,6 +79,9 @@ cc.Class({
     toCareerScene (event) {
         cc.director.loadScene("career");
     },
+    toMarketScene (event) {
+        cc.director.loadScene("market");
+    }
 
     // update (dt) {},
 });

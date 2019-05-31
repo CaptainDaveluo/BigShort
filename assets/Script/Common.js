@@ -1,3 +1,5 @@
 module.exports = {
-    cashNum : 0
+    cashNum : 0,
+    timmerCount : 0,
+    storeList:[]
 };

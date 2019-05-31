@@ -7,7 +7,7 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-
+var com = require("Common");
 cc.Class({
     extends: cc.Component,
 
@@ -35,7 +35,12 @@ cc.Class({
 
     onCareerTrainningTapped (event) {
         var scrollViewHandller = this.scrollView.getComponent("ScrollViewHandller");
-        scrollViewHandller.printMessage("通过培训支付了500元，您的工作技能得到了提升");
+        if (com.cashNum >= 500) {
+            scrollViewHandller.printMessage("通过培训支付了500元，您的工作技能得到了提升");
+            com.cashNum -= 500;
+        } else {
+            scrollViewHandller.printMessage("您当前的现金不足，先去打工再来提升自己吧!");
+        }
     },
     onBackButtonTapped (event) {
         cc.director.loadScene("main");
