@@ -7,16 +7,28 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-var com = require('Common');
+var com = require("Common");
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        targetButton:{
+        fundName:{
             default:null,
-            type:cc.Button
+            type:cc.Label
         },
-        buttonLabel:{
+        price:{
+            default:null,
+            type:cc.Label
+        },
+        earning:{
+            default:null,
+            type:cc.Label
+        },
+        type:{
+            default:null,
+            type:cc.Label
+        },
+        share:{
             default:null,
             type:cc.Label
         },
@@ -24,11 +36,12 @@ cc.Class({
             default:null,
             type:cc.Node
         },
-        cashLabel:{
+        delegate:{
             default:null,
-            type:cc.Label
+            type:cc.Component
         },
-        count: 0
+        cost:0,
+        value:0
         // foo: {
         //     // ATTRIBUTES:
         //     default: null,        // The default value will be used only when the component attaching
@@ -45,48 +58,33 @@ cc.Class({
         //     }
         // },
     },
-
+    onBuyButtonTapped (event) {
+        var scrollViewHandller = this.scrollView.getComponent("ScrollViewHandller");
+        var total = parseFloat(this.price.string)*1000; 
+        if (com.cashNum < total){
+            var message = "金钱不足,您当前仅有" + com.cashNum +"现金，购买需要" + total + "现金";
+            scrollViewHandller.printMessage(message);
+        } else {
+            var message = "你买入了" + this.fundName.string + "1000份，确认净值为:" + this.price.string +"总价:"+total;
+            scrollViewHandller.printMessage(message);
+            com.cashNum -= total;
+            this.delegate.addStoreItem(this.fundName.string,this.price.string);
+        }
+    },
+    onSellButtonTapped (event) {
+        var scrollViewHandller = this.scrollView.getComponent("ScrollViewHandller");
+        var total = this.value * parseInt(this.share.string);
+        var message = "你出售了" + this.fundName.string + "总价为:" + total;
+        com.cashNum += total;
+        this.delegate.removeStoreItem(this.fundName.string);
+        scrollViewHandller.printMessage(message);
+    },
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {},
 
     start () {
 
-    },
-
-    onWorkButtonTapped (event) {
-        var scrollViewHandller = this.scrollView.getComponent("ScrollViewHandller");
-        scrollViewHandller.printMessage("你通过工作得到了100元");
-        com.cashNum += 100;
-        
-        this.cashLabel.string = "" + com.cashNum;
-        com.timmerCount = 5;
-        this.callback = function () {
-            if (com.timmerCount == 0) {
-                // 倒计时结束可以使用按钮
-                this.buttonLabel.string = "工作";
-                this.targetButton.interactable = true;
-                this.unschedule(this.callback);
-                return;
-            }
-            this.buttonLabel.string = "" + com.timmerCount + "s";
-            com.timmerCount--;
-        };
-        this.schedule(this.callback, 1, 6, 0.1);
-        //禁用按钮
-        this.targetButton.interactable = false;
-    },
-    toCareerScene (event) {
-        cc.director.loadScene("career");
-    },
-    toMarketScene (event) {
-        cc.director.loadScene("market");
-    },
-    toFundScene (event) {
-        cc.director.loadScene("fund");
-    },
-    toStockScene (event) {
-        cc.director.loadScene("stocks");
     },
 
     // update (dt) {},
